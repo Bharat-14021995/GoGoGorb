@@ -54,7 +54,6 @@ video.addEventListener('play', () => {
             const detections = await faceapi.detectAllFaces(video,
                 new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
             const resizedDetections = faceapi.resizeResults(detections, displaySize);
-            //console.log(detections[0].landmarks.getMouth()[0]._x);
 
 
             // If the mouth points are near the image 
