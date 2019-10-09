@@ -10,6 +10,9 @@ var videoHeight = new Number();
 videoWidth = video.width;
 videoHeight = video.height;
 
+var edibles = [];
+var imagePositions = [];
+
 baguette.src = "images/baguette.png";
 croissant.src = "images/croissant.png";
 
@@ -41,8 +44,29 @@ function getRandomNumberY() {
 for (i = 0; i < 5; i++) {
     randomPositionX = getRandomNumberX();
     randomPositionY = getRandomNumberY();
-    console.log(randomPositionX + " "+ randomPositionY);
+    addEdibleAndItsPosition(baguette, randomPositionX,randomPositionY);
 }    
+
+for (i = 0; i < 3; i++) {
+    randomPositionX = getRandomNumberX();
+    randomPositionY = getRandomNumberY();
+    addEdibleAndItsPosition(croissant, randomPositionX,randomPositionY);
+} 
+
+function addEdibleAndItsPosition(newEdible , xVal, yVal) {
+    edibles.push(newEdible);
+    imagePositions.push({x: xVal, y:yVal});
+}
+
+function removeEdibleAndItsPosition(indexPos){
+    edibles = edibles.slice(indexPos, indexPos+1);
+    imagePositions = imagePositions.slice(indexPos, indexPos+1);
+}
+
+function drawEdibles(canvas, newEdible, Xposition, Yposition){
+    canvas.getContext('2d').drawImage(newEdible, Xposition, Yposition);
+}
+
 
 video.addEventListener('play', () => {
     const canvas = faceapi.createCanvasFromMedia(video);
@@ -57,10 +81,22 @@ video.addEventListener('play', () => {
             const detections = await faceapi.detectAllFaces(video,
             new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
             const resizedDetections = faceapi.resizeResults(detections, displaySize);
-            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);   
-            canvas.getContext('2d').drawImage(croissant,randomPositionX,randomPositionY);
-            canvas.getContext('2d').drawImage(baguette,0,0);             
 
+            // If the mouth points are near the image 
+            if(Math.abs(detections[0].landmarks.getMouth()[0]._x - 500) < 50){  
+                console.log("volia !!!"+ edibles.length); 
+                removeEdibleAndItsPosition(0);
+
+            }
+            
+            canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
+            
+
+            for(var i=0; i< edibles.length; i++){
+                drawEdibles(canvas, edibles[i], imagePositions[i].x, imagePositions[i].y);
+            }
+            // canvas.getContext('2d').drawImage(baguette,0,0);
+            // canvas.getContext('2d').drawImage(croissant,500,300);
             faceapi.draw.drawDetections(canvas, resizedDetections);
             faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
         }, 100)
