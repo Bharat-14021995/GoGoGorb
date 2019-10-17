@@ -7,8 +7,8 @@ var randomPositionY = new Number();
 var videoWidth = new Number();
 var videoHeight = new Number();
 
-videoWidth = video.width;
-videoHeight = video.height;
+videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px","");
+videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px","");
 
 var edibles = [];
 var imagePositions = [];
