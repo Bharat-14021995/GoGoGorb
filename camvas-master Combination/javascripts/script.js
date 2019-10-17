@@ -2,19 +2,16 @@ const video = document.getElementById('video');
 
 var baguette = new Image();
 var croissant = new Image();
-var randomPositionX = new Number();
-var randomPositionY = new Number();
-var videoWidth = new Number();
-var videoHeight = new Number();
 
 var indexOfTheEdible;
-videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px","");
-videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px","");
+var buttonStatus = document.getElementById('score').innerText;    
+var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px","");
+var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px","");
 
+const foodOptions = [baguette, croissant];
 var edibles = [];
 var imagePositions = [];
 var isEdibleNearMouth = [];
-
 
 baguette.src = "images/baguette.png";
 croissant.src = "images/croissant.png";
@@ -34,26 +31,21 @@ function playVideo() {
     )
 }
 
-function getRandomNumberX() {
-    randomPositionX = Math.floor(Math.random() * (videoWidth-50));
-    return randomPositionX;
+function startGame(){
+    if (buttonStatus = "START"){
+        for (var i = 0; i < 10; i++){
+            generateEdible();
+        }
+        document.getElementById('score').innerHTML = "0";
+    }       
 }
 
-function getRandomNumberY() {
-    randomPositionY = Math.floor(Math.random() * videoHeight - 50);
-    return randomPositionY;
-}
+function generateEdible(){
+    let newEdible = foodOptions[Math.floor(Math.random()*foodOptions.length)];
+    let randomPositionX = Math.floor(Math.random() * (videoWidth - 50));
+    let randomPositionY = Math.floor(Math.random() * (videoHeight - 50));
 
-for (i = 0; i < 5; i++) {
-    randomPositionX = getRandomNumberX();
-    randomPositionY = getRandomNumberY();
-    addEdibleAndItsPosition(baguette, randomPositionX,randomPositionY);
-}    
-
-for (i = 0; i < 3; i++) {
-    randomPositionX = getRandomNumberX();
-    randomPositionY = getRandomNumberY();
-    addEdibleAndItsPosition(croissant, randomPositionX, randomPositionY);
+    addEdibleAndItsPosition(newEdible, randomPositionX, randomPositionY);
 }
 
 function addEdibleAndItsPosition(newEdible, xVal, yVal) {
@@ -254,13 +246,17 @@ video.addEventListener('play', () => {
              * 
              * eating(detections[0].landmarks.getMouth()
              */
+ 
+            if (buttonStatus != "START" && edibles.length < 10){
+                generateEdible();
+            }
+
             if (eating(detections[0].landmarks.getMouth())) {
                 console.log("volia !!!" + edibles.length);
 
             }
 
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
-
 
             for (var i = 0; i < edibles.length; i++) {
                 drawEdibles(canvas, edibles[i], imagePositions[i].x, imagePositions[i].y);

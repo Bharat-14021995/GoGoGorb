@@ -12,16 +12,17 @@ body {
     display: flex;
 }
 
-.score{
-    float: left;
+#score{
     color:#fff;
     background: #00b894;
     border-bottom-left-radius: 50% 25%;
     border-bottom-right-radius: 50% 25%;
     border-top-left-radius: 50% 25%;
     border-top-right-radius: 50% 25%;
-    padding: 10px;
-    margin: 100px 0px 0px 50px;
+    width: 100px;
+    text-align: center;
+    padding: 20px;
+    margin-left: 20px;
 }
 
 canvas {
