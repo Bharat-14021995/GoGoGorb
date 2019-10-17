@@ -1,36 +1,30 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>GoGoGorb !!</title>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>GoGoGorb !!</title>
 
-  <!-- <link rel="stylesheet" href="stylesheets/styles.min.css"> -->
-  <link rel="stylesheet" href="stylesheets/style.css">
-  <script defer src="javascripts/face-api.min.js"></script>
-  <script src="javascripts/scale.fix.js"></script>
-  <!-- <script src="javascripts/camvas.js"></script>
-    <script src="javascripts/camvas_example.js"></script> -->
-  <script defer src="javascripts/script.js"></script>
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <script defer src="javascripts/face-api.min.js"></script>
+    <script defer src="javascripts/script.js"></script>
 
-  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  </head>
 
-<body>
+  <body>
+  
+    <div class="score">
+      <h1>Score: 0</h1>
+    </div>
 
-  <!-- <div>
-    <h1>Point: 0</h1>
-    <p></p>
-  </div> -->
-  <div class="wrapper">
-    <video id="video" width="720" height="560" autoplay muted></video>
-  </div>
-
-</body>
+    <div id="wrapper">
+      <video id="video" autoplay muted></video>
+    </div>
+ 
+  </body>
 
 </html>

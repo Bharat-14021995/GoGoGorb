@@ -70,9 +70,9 @@ function drawEdibles(canvas, newEdible, Xposition, Yposition){
 
 video.addEventListener('play', () => {
     const canvas = faceapi.createCanvasFromMedia(video);
-    document.body.append(canvas);
+    document.getElementById('wrapper').append(canvas);
     const displaySize = {
-        width: video.width, height: video.height
+        width: videoWidth, height: videoHeight
     }
 
     faceapi.matchDimensions(canvas, displaySize);

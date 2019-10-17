@@ -297,7 +297,8 @@ h1.header{
     margin-top:0
 }
 a.header,a.name,h1.header,header a{
-    color:#fff
+    
+    
 }
 a.name{
     white-space:nowrap
