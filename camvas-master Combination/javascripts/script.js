@@ -32,18 +32,18 @@ function playVideo() {
 }
 
 function startGame(){
-    if (buttonStatus = "START"){
+    if (edibles.length == 0){
+        document.getElementById('score').innerHTML = "0";
         for (var i = 0; i < 10; i++){
             generateEdible();
         }
-        document.getElementById('score').innerHTML = "0";
     }       
 }
 
 function generateEdible(){
     let newEdible = foodOptions[Math.floor(Math.random()*foodOptions.length)];
-    let randomPositionX = Math.floor(Math.random() * (videoWidth - 50));
-    let randomPositionY = Math.floor(Math.random() * (videoHeight - 50));
+    let randomPositionX = Math.floor(Math.random() * (videoWidth - 150)) + 30;
+    let randomPositionY = Math.floor(Math.random() * (videoHeight - 150)) + 30;
 
     addEdibleAndItsPosition(newEdible, randomPositionX, randomPositionY);
 }
