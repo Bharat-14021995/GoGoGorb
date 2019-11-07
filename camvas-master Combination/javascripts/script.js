@@ -4,7 +4,8 @@ var baguette = new Image();
 var croissant = new Image();
 
 var indexOfTheEdible;
-var buttonStatus = document.getElementById('score').innerText;    
+var buttonStatus = document.getElementById('score').innerText; 
+var score = 0;   
 var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px","");
 var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px","");
 
@@ -33,7 +34,7 @@ function playVideo() {
 
 function startGame(){
     if (edibles.length == 0){
-        document.getElementById('score').innerHTML = "0";
+        document.getElementById('score').innerHTML = score;
         for (var i = 0; i < 10; i++){
             generateEdible();
         }
@@ -43,9 +44,14 @@ function startGame(){
 function generateEdible(){
     let newEdible = foodOptions[Math.floor(Math.random()*foodOptions.length)];
     let randomPositionX = Math.floor(Math.random() * (videoWidth - 150)) + 30;
+    //let randomPositionX = Math.floor(Math.random() * videoWidth);
     let randomPositionY = Math.floor(Math.random() * (videoHeight - 150)) + 30;
+    //let randomPositionY = Math.floor(Math.random() * videoHeight);
+    
+    
 
     addEdibleAndItsPosition(newEdible, randomPositionX, randomPositionY);
+    console.log(randomPositionX, randomPositionY, newEdible);
 }
 
 function addEdibleAndItsPosition(newEdible, xVal, yVal) {
@@ -98,12 +104,14 @@ function eating(mouthPositionPoints) {
     var poly = findTheMouthRegion(mouthPositionPoints);
 
     // console.log("***********************");
-    console.log(poly);
+    //console.log(poly);
 
     for (var v = 0; v < imagePositions.length; v++) {
         console.log(imagePositions[v]);
         if (nearAnEdible(poly, imagePositions[v].x, imagePositions[v].y)) {
             removeEdibleAndItsPosition(v);
+            document.getElementById('score').innerHTML = score++;
+            generateEdible();
             console.log("removed an edible at pos "+v +"in array ");
         }
     }
@@ -247,9 +255,9 @@ video.addEventListener('play', () => {
              * eating(detections[0].landmarks.getMouth()
              */
  
-            if (buttonStatus != "START" && edibles.length < 10){
-                generateEdible();
-            }
+            // if (buttonStatus != "START" && edibles.length < 10){
+            //     generateEdible();
+            // }
 
             if (eating(detections[0].landmarks.getMouth())) {
                 console.log("volia !!!" + edibles.length);
