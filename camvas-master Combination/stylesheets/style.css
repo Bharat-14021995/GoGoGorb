@@ -1,9 +1,6 @@
 body {
-    width: 100vw;
-    height: 100vh;
-    background-image: url("../images/City4_pale.png");
-    background-size: 100% 100%;
-    padding:0;
+    width: 99vw;
+    background: #772F1A;
     font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
@@ -13,27 +10,52 @@ body {
     display: flex;
 }
 
-#button{
+#board{
     float: right;
-    margin: 150px 170px 0px 0px;
-    color:#fff;
-    background: #00b894;
-    border-bottom-left-radius: 50% 25%;
-    border-bottom-right-radius: 50% 25%;
-    border-top-left-radius: 50% 25%;
-    border-top-right-radius: 50% 25%;
-    width: 150px;
+    margin: 80px 110px 0px 0px;
+    background-image: url("../images/MenuBoard.png");
     text-align: center;
-    padding: 20px;
     cursor: pointer;
+    width: 300px;
+    height: 400px;
+    justify-content: center;
+    align-items: center;
 }
 
-#button:hover{
-    background: #e66767;
+button{
+    color: #fff;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 20px;
+    letter-spacing: 2px;
+    word-spacing: 2px;
+    background: #12533b;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+    border: none;
+    width: 150px;
 }
 
-#button:focus {
-    outline:0;
+button:hover{
+    color: #000;
+    border: 3px dashed black;
+}
+
+button:focus {
+    outline: transparent;
+}
+
+p{
+    color: #fff;
+    font-family: "Comic Sans MS", cursive, sans-serif;
+    font-size: 20px;
+    font-style: italic;
+    letter-spacing: 2px;
+    word-spacing: 2px;
 }
 
 canvas {
@@ -43,9 +65,9 @@ canvas {
 }
 
 video {
-    width: 60vw;
-    height: 90vh;
-    border:5px dashed #ffeaa7;
+    border:5px dashed #F2A65A;
     transform: rotateY(180deg);
-    -webkit-transform: rotateY(180deg); 
+    -webkit-transform: rotateY(180deg);         
+    height: 630px;
+    width: 840px;
 }

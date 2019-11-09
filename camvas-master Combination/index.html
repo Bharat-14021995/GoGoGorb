@@ -16,7 +16,12 @@
   </head>
 
   <body>
-    <button id="button" onclick="startGame()"><h1 id="score">START</h1></button>
+    <div id="board" onclick="startGame()">
+      <button id="time">START</button>
+      <div id="details" style="display: none">
+        <p>Score</p><p id="score"></p>
+      </div>
+    </div>
     <div id="wrapper">
       <video id="video" autoplay muted></video>
     </div>
