@@ -28,6 +28,7 @@ var score = 0;
 var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px", "");
 var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px", "");
 
+
 const foodOptions = [baguette, croissant];
 const drinkOptions = [wine, coffee];
 
@@ -69,7 +70,6 @@ recognition.onresult = function (event) {
     detectDrink == "Wine" || detectDrink == "Coffee" || 
     detectDrink == "wayne"||detectDrink == "Wayne" || detectDrink == "espresso") {
         if (drinks.length > 0) {
-            console.log("in the pop part !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             drinks.pop();
             drinksPositions.pop();
             score += 5;
@@ -88,7 +88,6 @@ function startGame() {
     if (edibles.length == 0) {
         document.getElementById('instructions').style.display = "none";
         document.getElementById('details').style.display = "block";
-        //document.getElementById('time').innerHTML = "01:00";
         document.getElementById('score').innerHTML = score;
         for (var i = 0; i < 10; i++) {
             generateEdible();
@@ -132,8 +131,8 @@ function startTimer() {
 function generateWineOrCoffee() {
     var drinkInterval = setInterval(function () {
         let newDrink = drinkOptions[Math.floor(Math.random() * foodOptions.length)];
-        let randomPositionX = Math.floor(Math.random() * (videoWidth - 150)) + 40;
-        let randomPositionY = Math.floor(Math.random() * (videoHeight - 150)) + 40;
+        let randomPositionX = Math.floor(Math.random() * (videoWidth - 250)) ;
+        let randomPositionY = Math.floor(Math.random() * (videoHeight - 250)) ;
         addDrinkAndItsPosition(newDrink, randomPositionX, randomPositionY);
         removeWineOrCoffee();
     }, 10000);
@@ -141,7 +140,6 @@ function generateWineOrCoffee() {
 
 function removeWineOrCoffee() {
         var removeDrinkInterval = setInterval(function () {
-            console.log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
             if (drinks.length > 0) {
             drinks = [];
             drinksPositions = [];
@@ -158,8 +156,9 @@ function addDrinkAndItsPosition(drink, xPos, yPos) {
 
 function generateEdible() {
     let newEdible = foodOptions[Math.floor(Math.random() * foodOptions.length)];
-    let randomPositionX = Math.floor(Math.random() * (videoWidth - 150)) + 40;
-    let randomPositionY = Math.floor(Math.random() * (videoHeight - 150)) + 40;
+    console.log(videoWidth+ "^^^^^^^"+ videoHeight);
+    let randomPositionX = Math.floor(Math.random() * (videoWidth - 280)) + 50;
+    let randomPositionY = Math.floor(Math.random() * (videoHeight - 280)) + 100;
 
     let boxCoOrdinates = generateBoxAroundEdible(randomPositionX, randomPositionY);
 
