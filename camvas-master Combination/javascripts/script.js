@@ -13,24 +13,26 @@ var speechRecognitionList = new SpeechGrammarList();
 speechRecognitionList.addFromString(grammar, 1);
 recognition.grammars = speechRecognitionList;
 recognition.lang = 'en-US';
+recognition.continuous = true;
 recognition.interimResults = false;
 recognition.maxAlternatives = 1;
 
-document.body.onclick = function () {
-    recognition.start();
-    console.log("ready to detect Wine/Coffee");
-}
+
 
 recognition.onresult = function (event) {
+    //recognition.start();
     var last = event.results.length - 1;
     var detectedEdible = event.results[last][0].transcript;
-
+    
     console.log(detectedEdible + "***************");
+    if(detectedEdible == "wine" || detectedEdible == "coffee"){
+        console.log("Congrats Manh You are Awesome at this game");
+    }
 }
 
-recognition.onspeechend = function () {
-    recognition.stop();
-}
+ recognition.onspeechend = function () {
+     recognition.stop();
+ }
 
 
 var baguette = new Image();
@@ -69,12 +71,14 @@ function playVideo() {
 function startGame() {
     if (edibles.length == 0) {
         document.getElementById('details').style.display = "block";
-        document.getElementById('time').innerHTML = "01:00";
+        //document.getElementById('time').innerHTML = "01:00";
         document.getElementById('score').innerHTML = score;
         for (var i = 0; i < 10; i++) {
             generateEdible();
         }
         startTimer();
+        recognition.start();
+        console.log("ready to detect Wine/Coffee");
     }
 }
 
@@ -94,13 +98,13 @@ function startTimer() {
         var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
         // Output the result in an element with id="demo"
-        document.getElementById("timer").innerHTML = seconds + "s ";
+        document.getElementById("time").innerHTML = seconds + "s ";
 
         // If the count down is over, write some text 
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("timer").innerHTML = "EXPIRED";
-            window.location.href = "someOtherFile.html";
+            document.getElementById("time").innerHTML = "EXPIRED";
+            window.location.href = "finish.html";
             document.getElementById("score").innerHTML = score;
         }
     }, 1000);
@@ -161,8 +165,8 @@ function findTheMouthRegion(points) {
         }
     }
 
-    console.log(smallX + "--small--" + smallY);
-    console.log(largeX + "--large--" + largeY);
+    // console.log(smallX + "--small--" + smallY);
+    // console.log(largeX + "--large--" + largeY);
 
     return [[smallX, smallY], [smallX, largeY], [largeX, largeY], [largeX, smallY]];
 }
@@ -251,11 +255,7 @@ video.addEventListener('play', () => {
             for (var i = 0; i < edibles.length; i++) {
                 drawEdibles(canvas, edibles[i], imagePositions[i].x, imagePositions[i].y);
             }
-            // canvas.getContext('2d').drawImage(baguette,0,0);
-            // canvas.getContext('2d').drawImage(croissant,500,300);
 
-            //-------------- removed the drawings of the points of landmarks
-            //faceapi.draw.drawDetections(canvas, resizedDetections);
             faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
         }, 100)
 
