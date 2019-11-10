@@ -1,3 +1,8 @@
+const video = document.getElementById('video');
+
+var baguette = new Image();
+var croissant = new Image();
+
 var indexOfTheEdible;
 var buttonStatus = document.getElementById('score').innerText; 
 var score = 0;   
@@ -9,18 +14,8 @@ var edibles = [];
 var imagePositions = [];
 var isEdibleNearMouth = [];
 
-var baguette = new Image();
 baguette.src = "images/baguette.png";
-var croissant = new Image();
 croissant.src = "images/croissant.png";
-const foodOptions = [baguette, croissant];
-
-const video = document.getElementById('video');
-var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px","");
-var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px","");
-
-var buttonStatus = document.getElementById('score').innerText; 
-var score = 0;   
 
 // loading all the models async
 Promise.all([
@@ -39,6 +34,8 @@ function playVideo() {
 
 function startGame(){
     if (edibles.length == 0){
+        document.getElementById('details').style.display = "block";
+        document.getElementById('time').innerHTML = "01:00";
         document.getElementById('score').innerHTML = score;
         for (var i = 0; i < 10; i++){
             generateEdible();
@@ -71,11 +68,7 @@ function removeEdibleAndItsPosition(indexPos) {
 }
 
 function drawEdibles(canvas, newEdible, Xposition, Yposition) {
-    var ctx = canvas.getContext("2d");
-    ctx.font = "30px Arial";
-    ctx.fillStyle = "#FF0000";
-    ctx.fillText(newEdible, Xposition, Yposition);
-//    canvas.getContext('2d').drawImage(newEdible, Xposition, Yposition);
+    canvas.getContext('2d').drawImage(newEdible, Xposition, Yposition);
 }
 
 function findTheMouthRegion(points) {
@@ -116,7 +109,7 @@ function eating(mouthPositionPoints) {
     //console.log(poly);
 
     for (var v = 0; v < imagePositions.length; v++) {
-//        console.log(imagePositions[v]);
+        console.log(imagePositions[v]);
         if (nearAnEdible(poly, imagePositions[v].x, imagePositions[v].y)) {
             removeEdibleAndItsPosition(v);
             document.getElementById('score').innerHTML = score++;
@@ -245,10 +238,10 @@ video.addEventListener('play', () => {
     document.getElementById('wrapper').append(canvas);
     const displaySize = {
         width: videoWidth, height: videoHeight
-}
+    }
 
-faceapi.matchDimensions(canvas, displaySize);
-setInterval(
+    faceapi.matchDimensions(canvas, displaySize);
+    setInterval(
         async () => {
             const detections = await faceapi.detectAllFaces(video,
             new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
