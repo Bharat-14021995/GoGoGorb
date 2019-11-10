@@ -68,6 +68,8 @@ function playVideo() {
 
 function startGame() {
     if (edibles.length == 0) {
+        document.getElementById('details').style.display = "block";
+        document.getElementById('time').innerHTML = "01:00";
         document.getElementById('score').innerHTML = score;
         for (var i = 0; i < 10; i++) {
             generateEdible();
@@ -209,6 +211,7 @@ function nearAnEdible(vs, x, y) {
 
     return inside;
 };
+
 
 video.addEventListener('play', () => {
     const canvas = faceapi.createCanvasFromMedia(video);
