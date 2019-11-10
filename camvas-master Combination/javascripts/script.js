@@ -1,17 +1,51 @@
 const video = document.getElementById('video');
 
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var SpeechGrammarList = SpeechGrammarList || webkitSpeechGrammarList;
+var SpeechRecognitionEvent = SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+
+var voiceEdibles = ['Wine', 'Coffee'];
+var grammar = '#JSGF V1.0; grammar voiceEdibles; public <voiceEdibles> = ' + voiceEdibles.join(' | ') + ' ;'
+
+var recognition = new SpeechRecognition();
+var speechRecognitionList = new SpeechGrammarList();
+
+speechRecognitionList.addFromString(grammar, 1);
+recognition.grammars = speechRecognitionList;
+recognition.lang = 'en-US';
+recognition.interimResults = false;
+recognition.maxAlternatives = 1;
+
+document.body.onclick = function () {
+    recognition.start();
+    console.log("ready to detect Wine/Coffee");
+}
+
+recognition.onresult = function (event) {
+    var last = event.results.length - 1;
+    var detectedEdible = event.results[last][0].transcript;
+
+    console.log(detectedEdible + "***************");
+}
+
+recognition.onspeechend = function () {
+    recognition.stop();
+}
+
+
 var baguette = new Image();
 var croissant = new Image();
 
 var indexOfTheEdible;
-var buttonStatus = document.getElementById('score').innerText; 
-var score = 0;   
-var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px","");
-var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px","");
+var buttonStatus = document.getElementById('score').innerText;
+var score = 0;
+var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px", "");
+var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px", "");
 
 const foodOptions = [baguette, croissant];
 var edibles = [];
 var imagePositions = [];
+var imageBoundary = [];
 var isEdibleNearMouth = [];
 
 baguette.src = "images/baguette.png";
@@ -32,39 +66,74 @@ function playVideo() {
     )
 }
 
-function startGame(){
-    if (edibles.length == 0){
+function startGame() {
+    if (edibles.length == 0) {
         document.getElementById('details').style.display = "block";
         document.getElementById('time').innerHTML = "01:00";
         document.getElementById('score').innerHTML = score;
-        for (var i = 0; i < 10; i++){
+        for (var i = 0; i < 10; i++) {
             generateEdible();
         }
-    }       
+        startTimer();
+    }
 }
 
-function generateEdible(){
-    let newEdible = foodOptions[Math.floor(Math.random()*foodOptions.length)];
-    let randomPositionX = Math.floor(Math.random() * (videoWidth - 150)) + 30;
-    //let randomPositionX = Math.floor(Math.random() * videoWidth);
-    let randomPositionY = Math.floor(Math.random() * (videoHeight - 150)) + 30;
-    //let randomPositionY = Math.floor(Math.random() * videoHeight);
-    
-    
+function startTimer() {
+    var countDownDate = new Date(new Date().getTime() + 32000).getTime();
 
-    addEdibleAndItsPosition(newEdible, randomPositionX, randomPositionY);
+    // Update the count down every 1 second
+    var x = setInterval(function () {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+
+        // Time calculations for days, hours, minutes and seconds
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        // Output the result in an element with id="demo"
+        document.getElementById("timer").innerHTML = seconds + "s ";
+
+        // If the count down is over, write some text 
+        if (distance < 0) {
+            clearInterval(x);
+            document.getElementById("timer").innerHTML = "EXPIRED";
+            window.location.href = "someOtherFile.html";
+            document.getElementById("score").innerHTML = score;
+        }
+    }, 1000);
+}
+
+function generateEdible() {
+    let newEdible = foodOptions[Math.floor(Math.random() * foodOptions.length)];
+    let randomPositionX = Math.floor(Math.random() * (videoWidth - 150)) + 40;
+    //let randomPositionX = Math.floor(Math.random() * videoWidth);
+    let randomPositionY = Math.floor(Math.random() * (videoHeight - 150)) + 40;
+    //let randomPositionY = Math.floor(Math.random() * videoHeight);
+
+    let boxCoOrdinates = generateBoxAroundEdible(randomPositionX, randomPositionY);
+
+    addEdibleAndItsPosition(newEdible, randomPositionX, randomPositionY, boxCoOrdinates);
     console.log(randomPositionX, randomPositionY, newEdible);
 }
 
-function addEdibleAndItsPosition(newEdible, xVal, yVal) {
+function generateBoxAroundEdible(X, Y) {
+    return [[X - 35, Y + 15], [X + 35, Y + 15], [X + 35, Y - 15], [X - 35, Y - 15]];
+}
+
+function addEdibleAndItsPosition(newEdible, xPos, yPos, boxCoOrdinates) {
     edibles.push(newEdible);
-    imagePositions.push({ x: xVal, y: yVal });
+    imageBoundary.push(boxCoOrdinates);
+    imagePositions.push({ x: xPos, y: yPos });
 }
 
 //Change the pattern of removing edibles
 function removeEdibleAndItsPosition(indexPos) {
     edibles.splice(indexPos, 1);
     imagePositions.splice(indexPos, 1);
+    imageBoundary.splice(indexPos, 1);
 }
 
 function drawEdibles(canvas, newEdible, Xposition, Yposition) {
@@ -92,8 +161,8 @@ function findTheMouthRegion(points) {
         }
     }
 
-    // console.log(smallX + "--small--" + smallY);
-    // console.log(largeX + "--large--" + largeY);
+    console.log(smallX + "--small--" + smallY);
+    console.log(largeX + "--large--" + largeY);
 
     return [[smallX, smallY], [smallX, largeY], [largeX, largeY], [largeX, smallY]];
 }
@@ -108,19 +177,25 @@ function eating(mouthPositionPoints) {
     // console.log("***********************");
     //console.log(poly);
 
-    for (var v = 0; v < imagePositions.length; v++) {
-        console.log(imagePositions[v]);
-        if (nearAnEdible(poly, imagePositions[v].x, imagePositions[v].y)) {
-            removeEdibleAndItsPosition(v);
-            document.getElementById('score').innerHTML = score++;
-            generateEdible();
-            console.log("removed an edible at pos "+v +"in array ");
+    for (var v = 0; v < imageBoundary.length; v++) {
+        for (var i = 0; i < imageBoundary[v].length; i++) {
+            //console.log("*****************"+imageBoundary[v]);
+            if (nearAnEdible(poly, imageBoundary[v][i][0], imageBoundary[v][i][1])) {
+                // console.log(imagePositions[v].x , imagePositions[v].y +"!!!!!!!!!!!!!!!!!!!");
+                // console.log(poly);
+                removeEdibleAndItsPosition(v);
+                score += 1;
+                document.getElementById('score').innerHTML = score;
+                generateEdible();
+                console.log("removed an edible at pos " + v + "in array ");
+            }
+
         }
     }
 
 }
 
-function nearAnEdible(vs, x, y){
+function nearAnEdible(vs, x, y) {
     // ray-casting algorithm based on
     // http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
 
@@ -137,101 +212,6 @@ function nearAnEdible(vs, x, y){
     return inside;
 };
 
-// function nearAnEdible(vs, x, y) {
-//     var n = vs.length
-//     var inside = 1
-//     var lim = n
-//     for (var i = 0, j = n - 1; i < lim; j = i++) {
-//         var a = vs[i]
-//         var b = vs[j]
-//         var yi = a[1]
-//         var yj = b[1]
-//         if (yj < yi) {
-//             if (yj < y && y < yi) {
-//                 var s = orient(a, b, point)
-//                 if (s === 0) {
-//                     return 0
-//                 } else {
-//                     inside ^= (0 < s) | 0
-//                 }
-//             } else if (y === yi) {
-//                 var c = vs[(i + 1) % n]
-//                 var yk = c[1]
-//                 if (yi < yk) {
-//                     var s = orient(a, b, point)
-//                     if (s === 0) {
-//                         return 0
-//                     } else {
-//                         inside ^= (0 < s) | 0
-//                     }
-//                 }
-//             }
-//         } else if (yi < yj) {
-//             if (yi < y && y < yj) {
-//                 var s = orient(a, b, point)
-//                 if (s === 0) {
-//                     return 0
-//                 } else {
-//                     inside ^= (s < 0) | 0
-//                 }
-//             } else if (y === yi) {
-//                 var c = vs[(i + 1) % n]
-//                 var yk = c[1]
-//                 if (yk < yi) {
-//                     var s = orient(a, b, point)
-//                     if (s === 0) {
-//                         return 0
-//                     } else {
-//                         inside ^= (s < 0) | 0
-//                     }
-//                 }
-//             }
-//         } else if (y === yi) {
-//             var x0 = Math.min(a[0], b[0])
-//             var x1 = Math.max(a[0], b[0])
-//             if (i === 0) {
-//                 while (j > 0) {
-//                     var k = (j + n - 1) % n
-//                     var p = vs[k]
-//                     if (p[1] !== y) {
-//                         break
-//                     }
-//                     var px = p[0]
-//                     x0 = Math.min(x0, px)
-//                     x1 = Math.max(x1, px)
-//                     j = k
-//                 }
-//                 if (j === 0) {
-//                     if (x0 <= x && x <= x1) {
-//                         return 0
-//                     }
-//                     return 1
-//                 }
-//                 lim = j + 1
-//             }
-//             var y0 = vs[(j + n - 1) % n][1]
-//             while (i + 1 < lim) {
-//                 var p = vs[i + 1]
-//                 if (p[1] !== y) {
-//                     break
-//                 }
-//                 var px = p[0]
-//                 x0 = Math.min(x0, px)
-//                 x1 = Math.max(x1, px)
-//                 i += 1
-//             }
-//             if (x0 <= x && x <= x1) {
-//                 return 0
-//             }
-//             var y1 = vs[(i + 1) % n][1]
-//             if (x < x0 && (y0 < y !== y1 < y)) {
-//                 inside ^= 1
-//             }
-//         }
-//     }
-//     return 2 * inside - 1
-// }
-
 
 video.addEventListener('play', () => {
     const canvas = faceapi.createCanvasFromMedia(video);
@@ -244,7 +224,7 @@ video.addEventListener('play', () => {
     setInterval(
         async () => {
             const detections = await faceapi.detectAllFaces(video,
-            new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
+                new faceapi.TinyFaceDetectorOptions()).withFaceLandmarks();
             const resizedDetections = faceapi.resizeResults(detections, displaySize);
 
             // If the mouth points are near the image 
@@ -256,7 +236,7 @@ video.addEventListener('play', () => {
              * 
              * eating(detections[0].landmarks.getMouth()
              */
- 
+
             // if (buttonStatus != "START" && edibles.length < 10){
             //     generateEdible();
             // }
