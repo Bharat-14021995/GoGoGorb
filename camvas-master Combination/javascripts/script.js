@@ -1,4 +1,10 @@
 var indexOfTheEdible;
+var buttonStatus = document.getElementById('score').innerText; 
+var score = 0;   
+var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px","");
+var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px","");
+
+const foodOptions = [baguette, croissant];
 var edibles = [];
 var imagePositions = [];
 var isEdibleNearMouth = [];
@@ -33,8 +39,6 @@ function playVideo() {
 
 function startGame(){
     if (edibles.length == 0){
-        document.getElementById('details').style.display = "block";
-        document.getElementById('time').innerHTML = "01:00";
         document.getElementById('score').innerHTML = score;
         for (var i = 0; i < 10; i++){
             generateEdible();
@@ -49,10 +53,10 @@ function generateEdible(){
     let randomPositionY = Math.floor(Math.random() * (videoHeight - 150)) + 30;
     //let randomPositionY = Math.floor(Math.random() * videoHeight);
     
-    let test = "";
-    test = test.concat(randomPositionX, ",", randomPositionY);
-    addEdibleAndItsPosition(test, randomPositionX, randomPositionY);
-    //    addEdibleAndItsPosition(newEdible, randomPositionX, randomPositionY);
+    
+
+    addEdibleAndItsPosition(newEdible, randomPositionX, randomPositionY);
+    console.log(randomPositionX, randomPositionY, newEdible);
 }
 
 function addEdibleAndItsPosition(newEdible, xVal, yVal) {
@@ -109,7 +113,7 @@ function eating(mouthPositionPoints) {
     var poly = findTheMouthRegion(mouthPositionPoints);
 
     // console.log("***********************");
-    console.log(poly);
+    //console.log(poly);
 
     for (var v = 0; v < imagePositions.length; v++) {
 //        console.log(imagePositions[v]);
