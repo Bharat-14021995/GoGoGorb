@@ -28,6 +28,14 @@ body {
     cursor: pointer;
 }
 
+#timer{
+    float: right;
+    text-align: center;
+    color:#fff;
+    font-size: 45px;
+}
+
+
 #button:hover{
     background: #e66767;
 }
