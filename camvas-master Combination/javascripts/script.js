@@ -39,7 +39,7 @@ var baguette = new Image();
 var croissant = new Image();
 
 var indexOfTheEdible;
-var buttonStatus = document.getElementById('score').innerText;
+//var buttonStatus = document.getElementById('score').innerText;
 var score = 0;
 var videoWidth = getComputedStyle(video).getPropertyValue("width").replace("px", "");
 var videoHeight = getComputedStyle(video).getPropertyValue("height").replace("px", "");
@@ -70,6 +70,7 @@ function playVideo() {
 
 function startGame() {
     if (edibles.length == 0) {
+        document.getElementById('instructions').style.display = "none";
         document.getElementById('details').style.display = "block";
         //document.getElementById('time').innerHTML = "01:00";
         document.getElementById('score').innerHTML = score;
@@ -103,9 +104,10 @@ function startTimer() {
         // If the count down is over, write some text 
         if (distance < 0) {
             clearInterval(x);
-            document.getElementById("time").innerHTML = "EXPIRED";
+            document.getElementById("time").innerHTML = "Bill please!";
             window.location.href = "finish.html";
-            document.getElementById("score").innerHTML = score;
+            localStorage.setItem("score", score);
+ //           document.getElementById("finalScore").innerHTML = localStorage.getItem("score");
         }
     }, 1000);
 }
