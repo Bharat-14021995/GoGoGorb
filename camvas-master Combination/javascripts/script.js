@@ -21,6 +21,8 @@ var baguette = new Image();
 var croissant = new Image();
 var wine = new Image();
 var coffee = new Image();
+var starOne = new Image();
+var starFive = new Image();
 
 var indexOfTheEdible;
 //var buttonStatus = document.getElementById('score').innerText;
@@ -36,6 +38,8 @@ var edibles = [];
 var imagePositions = [];
 var imageBoundary = [];
 var isEdibleNearMouth = [];
+var biteAudio = new Audio('audios/biteAudio.mp3');
+var yesAudio = new Audio('audios/yesAudio.mp3');
 
 var drinks = [];
 var drinksPositions = [];
@@ -44,6 +48,8 @@ baguette.src = "images/baguette.png";
 croissant.src = "images/croissant.png";
 wine.src = "images/wine.png";
 coffee.src = "images/coffee.png";
+starOne.src = "images/star1.png";
+starFive.src = "images/star5.png";
 
 // loading all the models async
 Promise.all([
@@ -70,11 +76,16 @@ recognition.onresult = function (event) {
     detectDrink == "Wine" || detectDrink == "Coffee" || 
     detectDrink == "wayne"||detectDrink == "Wayne" || detectDrink == "espresso") {
         if (drinks.length > 0) {
-            drinks.pop();
-            drinksPositions.pop();
+            yesAudio.play();
+            drinks.splice(-1, 1, starFive);
             score += 5;
             document.getElementById('score').innerHTML = score;
-            //debugger;
+    
+            var removeInterval = setInterval(function () {
+                drinks.pop();
+                drinksPositions.pop();
+                //debugger;
+            }, 2000);
         }
     }
 }
@@ -112,7 +123,7 @@ function startTimer() {
         var remaining = countDownTime - now;
 
         // Time calculations for days, hours, minutes and seconds
-        var seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+        seconds = Math.floor((remaining % (1000 * 60)) / 1000);
 
         // Output the result in an element with id="demo"
         document.getElementById("time").innerHTML = seconds + "s ";
@@ -156,7 +167,7 @@ function addDrinkAndItsPosition(drink, xPos, yPos) {
 
 function generateEdible() {
     let newEdible = foodOptions[Math.floor(Math.random() * foodOptions.length)];
-    console.log(videoWidth+ "^^^^^^^"+ videoHeight);
+    //console.log(videoWidth+ "^^^^^^^"+ videoHeight);
     let randomPositionX = Math.floor(Math.random() * (videoWidth - 280)) + 50;
     let randomPositionY = Math.floor(Math.random() * (videoHeight - 280)) + 100;
 
@@ -178,9 +189,14 @@ function addEdibleAndItsPosition(newEdible, xPos, yPos, boxCoOrdinates) {
 
 //Change the pattern of removing edibles
 function removeEdibleAndItsPosition(indexPos) {
-    edibles.splice(indexPos, 1);
-    imagePositions.splice(indexPos, 1);
-    imageBoundary.splice(indexPos, 1);
+    biteAudio.play();
+    edibles.splice(indexPos, 1, starOne);
+    
+    var removeInterval = setInterval(function () {
+        edibles.splice(indexPos, 1);
+        imagePositions.splice(indexPos, 1);
+        imageBoundary.splice(indexPos, 1);
+    }, 2000);
 }
 
 function drawEdibles(canvas, newEdible, Xposition, Yposition) {
@@ -286,9 +302,13 @@ video.addEventListener('play', () => {
             //     generateEdible();
             // }
 
-            if (eating(detections[0].landmarks.getMouth())) {
-                console.log("voila !!!" + edibles.length);
-
+            try {
+                if (eating(detections[0].landmarks.getMouth())) {
+                    console.log("voila !!!" + edibles.length);
+                }    
+            }
+            catch (error) {
+                console.error("cant get the landmark");
             }
 
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
