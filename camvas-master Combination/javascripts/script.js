@@ -151,14 +151,14 @@ function removeFeedback() {
 }
 
 /**
- * starts the countdown timer set to approximately 60 (63 as delay in loading the images on canvas)
+ * starts the countdown timer set to approximately 60 (61 as delay in loading the images on canvas)
  * 
  * on finish: redirects the page to endGame.html to display the score 
  */
 function startCountDownTimer() {
 
     // setting the count down timer
-    var countDownTime = new Date(new Date().getTime() + 63000).getTime();
+    var countDownTime = new Date(new Date().getTime() + 61000).getTime();
     // Update the count down every 1 second
     var countDownInterval = setInterval(function () {
         // Get current time
