@@ -1,34 +1,35 @@
 <!DOCTYPE html>
 <html>
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>GoGoGorb !!</title>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GoGoGorb !!</title>
 
-    <link rel="stylesheet" href="stylesheets/style.css">
-    <script src="javascripts/scale.fix.js"></script>
-    <script defer src="javascripts/face-api.min.js"></script>
-    <script defer src="javascripts/script.js"></script>
+  <link rel="stylesheet" href="stylesheets/style.css">
+  <script src="javascripts/scale.fix.js"></script>
+  <script defer src="javascripts/face-api.min.js"></script>
+  <script defer src="javascripts/script.js"></script>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-  </head>
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+</head>
 
-  <body>
-    <div id="board">
-      <button id = "time" onclick="startGame()">START</button>
-      <p id = "instructions">Eat the pastries, but "order" the drinks!</p>
-      
-      <div id="details" style="display: none">
-        <p>Score</p><p id="score"></p>
-      </div>
-    
+<body>
+  <div id="board">
+    <button id="time" onclick="startGame()">START</button>
+    <p id="instructions">Eat the pastries, but "order" the drinks!</p>
+
+    <div id="details" style="display: none">
+      <p>Score</p>
+      <p id="score"></p>
     </div>
-    <div id="wrapper">
-      <video id="video" autoplay muted></video>
-    </div>
- 
-  </body>
+
+  </div>
+  <div id="wrapper">
+    <video id="video" autoplay muted></video>
+  </div>
+
+</body>
 
 </html>

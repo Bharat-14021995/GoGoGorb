@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>GoGoGorb !!</title>
+  <link rel="stylesheet" href="stylesheets/style.css">
+</head>
+
+<script>
+  let finalScore = localStorage.getItem("score");
+
+  var finalImage;
+  if (finalScore > 10) {
+    finalImage = "images/full.png";
+  }
+  else {
+    finalImage = "images/hungry.png";
+  }
+
+  function backToGame() {
+    window.location.href = "index.html";
+  }
+
+</script>
+
+<body>
+  <script>
+    document.body.innerHTML =
+      "<p class = 'finalScore'>Voilà! Your score is " +
+      finalScore +
+      "<br>" +
+      "<button onclick = 'backToGame()'>Try again</button></p>" +
+      "<img src=" + finalImage + "></img>";    
+  </script>
+</body>
+
+</html>
