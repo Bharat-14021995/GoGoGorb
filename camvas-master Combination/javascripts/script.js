@@ -334,7 +334,9 @@ video.addEventListener('play', () => {
             }
             canvas.getContext('2d').clearRect(0, 0, canvas.width, canvas.height);
             drawCanvasObjects(canvas);
-            // faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
+
+            //**** comment the next line if you don't want the face-landmarks to show while playing
+            faceapi.draw.drawFaceLandmarks(canvas, resizedDetections);
         }, 100)
 })
 
