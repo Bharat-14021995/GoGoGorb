@@ -1,23 +1,22 @@
-# Camvas
+*********** GoGoGorb ************
 
-A simple HTML5 library to stream a webcam video to a `<canvas>` object. 
+A web based game combining both video and audio as the input to virtually eat (Move mouth position near the edibles)
+and order drinks (say the name of the drink) which is periodically displayed. Once the timer runs out you have your 
+Score!!. 
 
-Uses WebRTC (getUserMedia), Canvas and HTML5 Video.
+Enjoy !!
 
-Check out a sample application, too: [camvas_photobooth](http://cbrandolino.github.io/camvas_photobooth/).
+*********************************
 
-## Example usage:
-  ```javascript
-  window.onload = function(){
-    var ctx = document.getElementsByTagName('canvas')[0].getContext('2d')
-    var draw = function(video, dt) {
-      ctx.drawImage(video, 0, 0)
-    }
-    var myCamvas = new camvas(ctx, draw)
-  }
-  ```
+Instructions to run the application:
+1) Install live Server node package (npm install -g live-server) 
+   (Install Node.JS (https://nodejs.org/en/download/) if not already installed)
+2) Set Chrome as your default browser (chrome://settings/)
+3) Open terminal and 'cd' to the project directory (D:\...\GoGoGorb\...) and run live server (command : live-server).
+4) Make sure you hava a working internet connection for the voice recognition to work.
+5) Click the start button and enjoy the game !!
 
-## Homepage
+*********************************
 
-You can find annotated source code, demo and useful resources at [http://cbrandolino.github.com/camvas](http://cbrandolino.github.com/camvas)
+GitHub link : https://github.com/Bharat-14021995/GoGoGorb
 
